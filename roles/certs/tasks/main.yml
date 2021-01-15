@@ -56,7 +56,7 @@
 
 - name: debug printout of signed cert dict
   debug:
-    msg: "{{ item }}"
+    msg: "{{ item.item }}"
   loop: "{{ signed_certs.results }}"
 
 
