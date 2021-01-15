@@ -31,6 +31,7 @@ certificates:
 
   - name: github.library.ucsb.edu
     service: github-enterprise
+    key_size: 2048
     passphrase: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           66663562363335653833613231623230376461383564346364383436346332313131613362376133

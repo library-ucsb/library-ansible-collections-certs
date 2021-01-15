@@ -18,7 +18,7 @@
 - name: generate openssl private keys
   community.crypto.openssl_privatekey:
     path: "{{ certs_global.cert_storage_path }}/{{ item.name }}/{{ item.cert.cn }}.private.pem"
-    size: "{{ certs_global.key_size }}"
+    size: "{{ item.key_size | default(certs_global.key_size) }}"
     passphrase: "{{ item.passphrase | default(omit) }}"
     cipher: "{{ item.cipher | default(omit) }}"
     backup: yes
@@ -52,21 +52,24 @@
       cert: "{{ item.cert }}"
   loop: "{{ certificates }}"
   register: signed_certs
-  when: "not '{{ certs_global.cert_storage_path }}/{{ item.name }}/{{ item.cert.cn }}.certificate.pem' is exists"
+  when: "'{{ certs_global.cert_storage_path }}/{{ item.name }}/{{ item.cert.cn }}.certificate.pem' is exists"
 
 - name: debug printout of signed cert dict
   debug:
-    msg: "{{ item.item }}"
+    msg: "{{ item }}"
   loop: "{{ signed_certs.results }}"
+  when: item is not skipped
 
 
 - name: generate pkcs#12 file
   community.crypto.openssl_pkcs12:
     action: export
-    path: "{{ certs_global.cert_storage_path }}/{{ item.name }}/{{ item.cert.cn }}.pkcs12"
-    privatekey_path: "{{ certs_global.cert_storage_path }}/{{ item.name }}/{{ item.cert.cn }}.private.pem"
-    privatekey_passphrase: "{{ item.passphrase | default(omit) }}"
-    certificate_path: "{{ certs_global.cert_storage_path }}/{{ item.name }}/{{ item.cert.cn }}.certificate.pem"
-    other_certificates: "{{ certs_global.cert_storage_path }}/{{ item.name }}/ca.pem"
+    friendly_name: "{{ item.item.name }}"
+    path: "{{ certs_global.cert_storage_path }}/{{ item.item.name }}/{{ item.item.cert.cn }}.pkcs12"
+    privatekey_path: "{{ certs_global.cert_storage_path }}/{{ item.item.name }}/{{ item.item.cert.cn }}.private.pem"
+    privatekey_passphrase: "{{ item.item.passphrase | default(omit) }}"
+    certificate_path: "{{ certs_global.cert_storage_path }}/{{ item.item.name }}/{{ item.item.cert.cn }}.certificate.pem"
+    other_certificates: "{{ certs_global.cert_storage_path }}/{{ item.item.name }}/ca.pem"
     state: present
   loop: "{{ signed_certs.results }}"
+  when: item is not skipped
