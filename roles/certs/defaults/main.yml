@@ -19,14 +19,14 @@ certs_global:
 certificates:
   - name: vpn-admin.library.ucsb.edu
     service: openvpn-admin
-    passphrase:
+    passphrase: 
     cert:
       cn: vpn-admin.library.ucsb.edu
       sans: []
 
   - name: wiki.library.ucsb.edu
     service: confluence
-    passphrase:
+    passphrase: 
     cert:
       cn: wiki.library.ucsb.edu
       sans: []
