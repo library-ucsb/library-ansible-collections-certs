@@ -29,6 +29,7 @@
   community.crypto.openssl_csr:
     path: "{{ certs_global.cert_storage_path }}/{{ item.name }}/{{ item.cert.cn }}.csr"
     privatekey_path: "{{ certs_global.cert_storage_path }}/{{ item.name }}/{{ item.cert.cn }}.private.pem"
+    privatekey_passphrase: "{{ item.passphrase }}"
     subject_alt_name: "{{ item.cert.sans | map('regex_replace', '^', 'DNS:') | list }}"
     common_name: "{{ item.cert.cn }}"
     email_address: "{{ certs_global.email }}"
