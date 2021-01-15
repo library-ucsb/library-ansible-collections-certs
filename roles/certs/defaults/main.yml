@@ -19,14 +19,12 @@ certs_global:
 certificates:
   - name: vpn-admin.library.ucsb.edu
     service: openvpn-admin
-    passphrase: 
     cert:
       cn: vpn-admin.library.ucsb.edu
       sans: []
 
   - name: wiki.library.ucsb.edu
     service: confluence
-    passphrase: 
     cert:
       cn: wiki.library.ucsb.edu
       sans: []
@@ -40,6 +38,7 @@ certificates:
           63343934346231373765613063376132616532636638633464373132663665356363636137376637
           3765373334653865620a336437646636646332613461373332623834653666323538373264613961
           63396265643964313831663562393635393136613530326432663361666364623835
+    cipher: auto
     cert:
       cn: github.library.ucsb.edu
       sans:
@@ -66,6 +65,7 @@ certificates:
           63343934346231373765613063376132616532636638633464373132663665356363636137376637
           3765373334653865620a336437646636646332613461373332623834653666323538373264613961
           63396265643964313831663562393635393136613530326432663361666364623835
+    cipher: auto
     cert:
       cn: device42.library.ucsb.edu
       sans:
