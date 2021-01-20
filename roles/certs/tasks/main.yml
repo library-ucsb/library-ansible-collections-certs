@@ -73,3 +73,14 @@
     state: present
   loop: "{{ signed_certs.results }}"
   when: item is not skipped
+
+- name: create haproxy cert ( private key > signed certificate > intermediate certificate )
+  community.crypto.openssl_x509_certificate:
+    path: "{{ certs_global.cert_storage_path }}/{{ item.item.name }}/{{ item.item.cert.cn }}.combined.cer"
+    csr_path: "{{ certs_global.cert_storage_path }}/{{ item.name }}/{{ item.cert.cn }}.csr"
+    provider: ownca
+    ownca_path:
+    ownca_privatekey_path:
+    
+  loop: "{{ signed_certs.results }}"
+  when: item is not skipped
