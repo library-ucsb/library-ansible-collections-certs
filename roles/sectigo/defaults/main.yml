@@ -1,0 +1,29 @@
+---
+# defaults file for sectigo
+
+## Place the UCSB common attributes here
+
+
+certs_default_key_size: 4096
+certs_default_email: itops-admins@library.ucsb.edu
+certs_default_country: US
+certs_default_state: CA
+certs_default_locality: Santa Barbara
+certs_default_ou: University of California, Santa Barbara
+
+certs_name: acme-default.library.ucsb.edu
+certs_cn: acme-default.library.ucsb.edu
+certs_sans: []
+
+certs_acme_private_key:  acme-ecc-private-key-testing.pem
+certs_acme_server_url:  "https://acme.sectigo.com/v2/InCommonECCOV"
+
+certs_acme_eab_alg: HS256
+certs_acme_eab_key: 
+certs_acme_eab_kid:
+
+certs_key_size: 4096
+certs_key_passphrase:
+certs_key_cipher:
+certs_key_path: ./
+certs_key_days: 90

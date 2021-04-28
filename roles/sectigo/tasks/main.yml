@@ -1,0 +1,93 @@
+---
+# tasks file for sectigo
+
+### ACME Account
+
+# Private Certificate Bound to ACME Account
+# - generate if doesn't exist
+# - connect to acme_account
+# - register: acme_account_url
+
+- name: acme_account - generate account private key
+  community.crypto.openssl_privatekey:
+    path: "{{ certs_acme_private_key }}"
+    size: 4096
+
+- name: acme_account - bind eab account using generated private key
+  community.crypto.acme_account:
+    account_key_src: "{{ certs_acme_private_key }}"
+    state: present
+    allow_creation: yes
+    terms_agreed: yes
+    acme_version: 2
+    external_account_binding:
+      alg: "{{ certs_acme_eab_alg }}"
+      key: "{{ certs_acme_eab_key }}"
+      kid: "{{ certs_acme_eab_kid }}"
+    acme_directory: "{{ certs_acme_server_url }}"
+    contact:
+      - "mailto:{{ certs_default_email }}"
+  register: sectigo_response
+
+- name: setting local facts for certificate module use
+  set_fact:
+    certs_private_key_fullpath: "{{ certs_key_path }}/{{ certs_name }}.private.key"
+    certs_csr_fullpath: "{{ certs_key_path }}/{{ certs_name }}.csr"
+    certs_certificate_fullpath: "{{ certs_key_path }}/{{ cert_name }}.crt"
+    certs_certificate_fullchain_fullpath: "{{ certs_key_path }}/{{ cert_name }}.fullchain.crt"
+    certs_certificate_chain_fullpath: "{{ certs_key_path }}/{{ cert_name }}.chain.crt"
+
+### Private Key - Host
+# - grab from SS, generate if doesn't exist
+# - 
+
+# Generate a new private key for the host
+- name: generate host private key
+  community.crypto.openssl_privatekey:
+    path: "{{ certs_private_key_fullpath }}"
+    size: "{{ certs_key_size | default(certs_default_key_size) }}"
+    passphrase: "{{ certs_key_passphrase | default(omit) }}"
+    cipher: "{{ certs_key_cipher | default(omit) }}"
+    backup: no
+
+# Derive the CSR 
+- name: derive the host certificate signing request
+  community.crypto.openssl_csr:
+    path: "{{ certs_csr_fullpath }}"
+    privatekey_path: "{{ certs_private_key_fullpath }}"
+    privatekey_passphrase: "{{ certs_key_passphrase | default(omit) }}"
+    subject_alt_name: "{{ certs_sans | map('regex_replace', '^', 'DNS:') | list }}"
+    common_name: "{{ certs_cn }}"
+    email_address: "{{ certs_default_email }}"
+    organizational_unit_name: "{{ certs_default_ou }}"
+    country_name: "{{ certs_default_country }}"
+    locality_name: "{{ certs_default_locality }}"
+    state_or_province_name: "{{ certs_default_state }}"
+
+# Submit CSR
+- name: acme_certificate - stage 1 - submit csr for cert generation
+  community.crypto.acme_certificate:
+    account_key_src: "{{ certs_private_key_fullpath }}"
+    acme_directory: "{{ certs_acme_server_url }}"
+    acme_version: 2
+    terms_agreed: yes
+    account_uri: "{{ sectigo_response.account_uri }}"
+    csr: "{{ certs_csr_fullpath }}"
+    dest: "{{ certs_certificate_fullpath }}"
+    fullchain_dest: "{{ certs_certificate_fullchain_fullpath }}"
+    chain_dest: "{{ certs_certificate_chain_fullpath }}"
+  register: sectigo_response_challenge
+
+# Pull the certs
+- name: acme_certificate - stage 2 - pull the signed certs
+  community.crypto.acme_certificate:
+    account_key_src: "{{ certs_acme_private_key }}"
+    account_email: "{{ certs_default_email }}"
+    src: "{{ certs_csr_fullpath }}"
+    cert: "{{ certs_certificate_fullpath }}"
+    fullchain: "{{ certs_certificate_fullchain_fullpath }}"
+    chain: "{{ certs_certificate_chain_fullpath }}"
+    acme_directory: "{{ certs_acme_server_url }}"
+    remaining_days: "{{ certs_key_days }}"
+    data: "{{ sectigo_response_challenge }}"
+  when: sectigo_response_challenge is changed

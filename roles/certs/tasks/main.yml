@@ -40,7 +40,13 @@
   loop: "{{ certificates }}"
 
 
-- name: check if the signed certificate exists
+
+### Create a dict of the certs that have a private key.
+
+# loop over the provided dict in the 'certificates' variable with the filter requirement that the private key file must exist.  
+# For those that do exist, we establish the vars we need going forward with with future tasks.  The results are then placed into
+# the 'signed_certs' local variable.
+- name: check for a pkcs12 cert
   set_fact:
     certificate:
     - path: "{{ certs_global.cert_storage_path }}/{{ item.name }}/{{ item.cert.cn }}.pkcs12"
@@ -61,6 +67,10 @@
   when: item is not skipped
 
 
+## PKCS12
+
+# Taking the 'signed_certs' variable defined in a previous task, loop over the structure to define the required
+# values to generate a pkcs12 file, which is a combo of our ca, out private key, and our signed cert.
 - name: generate pkcs#12 file
   community.crypto.openssl_pkcs12:
     action: export
@@ -73,3 +83,9 @@
     state: present
   loop: "{{ signed_certs.results }}"
   when: item is not skipped
+
+
+
+### Java Keystore
+
+
