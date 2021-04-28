@@ -15,60 +15,16 @@ certs_global:
       locality: Santa Barbara
       ou: University of California, Santa Barbara
 
+certs_acme:
+  acme_directory: https://acme.sectigo.com/v2/InCommonECCOV
+  acme_key_id: 0yhKtoqVdmaocgPzQ4IzbQ
+  acme_hmac_key: NbOk_Nz2aoqKJR7ZAvFQUbaRqzuRe5BH3rpr1Jc_4ZUiOnuhpOfUOewCgul9LAWoEG4ARJ8eXZt7ArrZIoBOTw
+
 
 certificates:
-  - name: vpn-admin.library.ucsb.edu
-    service: openvpn-admin
+  - name: acme-test.library.ucsb.edu
+    service: certs
     cert:
-      cn: vpn-admin.library.ucsb.edu
-      sans: []
-
-  - name: wiki.library.ucsb.edu
-    service: confluence
-    cert:
-      cn: wiki.library.ucsb.edu
-      sans: []
-
-  - name: github.library.ucsb.edu
-    service: github-enterprise
-    key_size: 2048
-    passphrase: !vault |
-          $ANSIBLE_VAULT;1.1;AES256
-          66663562363335653833613231623230376461383564346364383436346332313131613362376133
-          3631373238333835633339393437666162626362636464370a643434353433653738396239323466
-          63343934346231373765613063376132616532636638633464373132663665356363636137376637
-          3765373334653865620a336437646636646332613461373332623834653666323538373264613961
-          63396265643964313831663562393635393136613530326432663361666364623835
-    cipher: auto
-    cert:
-      cn: github.library.ucsb.edu
+      cn: acme-test.library.ucsb.edu
       sans:
-        - github.library.ucsb.edu
-        - avatars.library.ucsb.edu
-        - gist.library.ucsb.edu
-        - gist-raw.library.ucsb.edu
-        - uploads.library.ucsb.edu
-        - reply.library.ucsb.edu
-        - gist-assets.library.ucsb.edu
-        - pages.library.ucsb.edu
-        - codeload.library.ucsb.edu
-        - render.library.ucsb.edu
-        - raw.library.ucsb.edu,
-        - assets.library.ucsb.edu
-        - media.library.ucsb.edu 
-
-  - name: device42.library.ucsb.edu
-    service: ipam
-    passphrase: !vault |
-          $ANSIBLE_VAULT;1.1;AES256
-          66663562363335653833613231623230376461383564346364383436346332313131613362376133
-          3631373238333835633339393437666162626362636464370a643434353433653738396239323466
-          63343934346231373765613063376132616532636638633464373132663665356363636137376637
-          3765373334653865620a336437646636646332613461373332623834653666323538373264613961
-          63396265643964313831663562393635393136613530326432663361666364623835
-    cipher: auto
-    cert:
-      cn: device42.library.ucsb.edu
-      sans:
-        - device42.library.ucsb.edu
-        - d42.library.ucsb.edu
+        - acme-test-san-1.library.ucsb.edu
