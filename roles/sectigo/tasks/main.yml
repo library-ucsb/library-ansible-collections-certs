@@ -33,9 +33,9 @@
   set_fact:
     certs_private_key_fullpath: "{{ certs_key_path }}/{{ certs_name }}.private.key"
     certs_csr_fullpath: "{{ certs_key_path }}/{{ certs_name }}.csr"
-    certs_certificate_fullpath: "{{ certs_key_path }}/{{ cert_name }}.crt"
-    certs_certificate_fullchain_fullpath: "{{ certs_key_path }}/{{ cert_name }}.fullchain.crt"
-    certs_certificate_chain_fullpath: "{{ certs_key_path }}/{{ cert_name }}.chain.crt"
+    certs_certificate_fullpath: "{{ certs_key_path }}/{{ certs_name }}.crt"
+    certs_certificate_fullchain_fullpath: "{{ certs_key_path }}/{{ certs_name }}.fullchain.crt"
+    certs_certificate_chain_fullpath: "{{ certs_key_path }}/{{ certs_name }}.chain.crt"
 
 ### Private Key - Host
 # - grab from SS, generate if doesn't exist
