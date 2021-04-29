@@ -64,6 +64,17 @@
     locality_name: "{{ certs_default_locality }}"
     state_or_province_name: "{{ certs_default_state }}"
 
+# Debug
+- name: debug - vars
+  debug:
+    msg: "{{ item }}"
+  loop:
+    - "certs_private_key_fullpath: {{ certs_private_key_fullpath }}"
+    - "certs_acme_server_url: {{ certs_acme_server_url }}"
+    - "account_uri: {{ sectigo_response.account_uri }}"
+    - "certs_csr_fullpath: {{ certs_csr_fullpath }}"
+
+
 # Submit CSR
 - name: acme_certificate - stage 1 - submit csr for cert generation
   community.crypto.acme_certificate:
