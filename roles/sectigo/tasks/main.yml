@@ -4,9 +4,6 @@
 ### ACME Account
 
 # Private Certificate Bound to ACME Account
-# - generate if doesn't exist
-# - connect to acme_account
-# - register: acme_account_url
 
 - name: acme_account - generate account private key
   community.crypto.openssl_privatekey:
@@ -17,7 +14,7 @@
   community.crypto.acme_account:
     account_key_src: "{{ certs_acme_private_key }}"
     state: present
-    allow_creation: yes
+    allow_creation: no
     terms_agreed: yes
     acme_version: 2
     external_account_binding:
@@ -38,8 +35,6 @@
     certs_certificate_chain_fullpath: "{{ certs_key_path }}/{{ certs_name }}.chain.crt"
 
 ### Private Key - Host
-# - grab from SS, generate if doesn't exist
-# - 
 
 # Generate a new private key for the host
 - name: generate host private key
@@ -64,41 +59,40 @@
     locality_name: "{{ certs_default_locality }}"
     state_or_province_name: "{{ certs_default_state }}"
 
-# Debug
-- name: debug - vars
-  debug:
-    msg: "{{ item }}"
-  loop:
-    - "certs_private_key_fullpath: {{ certs_private_key_fullpath }}"
-    - "certs_acme_server_url: {{ certs_acme_server_url }}"
-    - "account_uri: {{ sectigo_response.account_uri }}"
-    - "certs_csr_fullpath: {{ certs_csr_fullpath }}"
-
 
 # Submit CSR
 - name: acme_certificate - stage 1 - submit csr for cert generation
   community.crypto.acme_certificate:
-    account_key_src: "{{ certs_private_key_fullpath }}"
-    acme_directory: "{{ certs_acme_server_url }}"
-    acme_version: 2
-    terms_agreed: yes
-    account_uri: "{{ sectigo_response.account_uri }}"
-    csr: "{{ certs_csr_fullpath }}"
-    dest: "{{ certs_certificate_fullpath }}"
-    fullchain_dest: "{{ certs_certificate_fullchain_fullpath }}"
-    chain_dest: "{{ certs_certificate_chain_fullpath }}"
-  register: sectigo_response_challenge
+    #account_key_src:  "{{ certs_private_key_fullpath }}"
+    account_key_src:  "{{ certs_acme_private_key }}"
+    acme_directory:   "{{ certs_acme_server_url }}"
+    account_uri:      "{{ sectigo_response.account_uri }}"
+    acme_version:     2
+
+    terms_agreed:     yes
+
+    csr:              "{{ certs_csr_fullpath }}"
+    dest:             "{{ certs_certificate_fullpath }}"
+    fullchain_dest:   "{{ certs_certificate_fullchain_fullpath }}"
+    chain_dest:       "{{ certs_certificate_chain_fullpath }}"
+  register:           sectigo_response_challenge
 
 # Pull the certs
 - name: acme_certificate - stage 2 - pull the signed certs
   community.crypto.acme_certificate:
-    account_key_src: "{{ certs_acme_private_key }}"
-    account_email: "{{ certs_default_email }}"
-    src: "{{ certs_csr_fullpath }}"
-    cert: "{{ certs_certificate_fullpath }}"
-    fullchain: "{{ certs_certificate_fullchain_fullpath }}"
-    chain: "{{ certs_certificate_chain_fullpath }}"
-    acme_directory: "{{ certs_acme_server_url }}"
-    remaining_days: "{{ certs_key_days }}"
-    data: "{{ sectigo_response_challenge }}"
+    account_key_src:  "{{ certs_acme_private_key }}"
+    acme_directory:   "{{ certs_acme_server_url }}"
+    account_uri:      "{{ sectigo_response.account_uri }}"
+    #account_email:    "{{ certs_default_email }}"
+    acme_version:     2
+
+    terms_agreed:     yes
+
+    src:              "{{ certs_csr_fullpath }}"
+    cert:             "{{ certs_certificate_fullpath }}"
+    fullchain:        "{{ certs_certificate_fullchain_fullpath }}"
+    chain:            "{{ certs_certificate_chain_fullpath }}"
+
+    remaining_days:   "{{ certs_key_days }}"
+    data:             "{{ sectigo_response_challenge }}"
   when: sectigo_response_challenge is changed
