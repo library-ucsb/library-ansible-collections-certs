@@ -1,5 +1,11 @@
 ---
 # tasks file for sectigo
+- name: prep - create cert directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{ certs_key_path }}"
 
 ### ACME Account
 
