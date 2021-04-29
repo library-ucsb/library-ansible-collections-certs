@@ -23,7 +23,7 @@ certs_acme_eab_key:
 certs_acme_eab_kid:
 
 certs_key_size: 4096
-certs_key_passphrase:
-certs_key_cipher:
+#certs_key_passphrase: ## uncomment to use, but keep commented if not
+#certs_key_cipher: ## need to assert something here if using a passphrase
 certs_key_path: ./
 certs_key_days: 90
