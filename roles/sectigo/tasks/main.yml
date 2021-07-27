@@ -102,3 +102,13 @@
     remaining_days:   "{{ certs_key_days }}"
     data:             "{{ sectigo_response_challenge }}"
   when: sectigo_response_challenge is changed
+
+- name: generate pkcs12 certificate file
+  community.crypto.openssl_pkcs12:
+    action:                export
+    path:                  "{{ certs_certificate_fullpath }}.pkcs12"
+    privatekey_path:       "{{ certs_private_key_fullpath }}"
+    privatekey_passphrase: "{{ certs_key_passphrase | default(omit) }}"
+    certificate_path:      "{{ certs_certificate_fullpath }}"
+    other_certificates:    "{{ certs_certificate_fullchain_fullpath }}"
+    state:                 present
