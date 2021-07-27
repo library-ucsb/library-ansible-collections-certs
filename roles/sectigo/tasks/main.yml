@@ -20,7 +20,7 @@
   community.crypto.acme_account:
     account_key_src: "{{ certs_acme_private_key }}"
     state: present
-    allow_creation: no
+    allow_creation: yes
     terms_agreed: yes
     acme_version: 2
     external_account_binding:
