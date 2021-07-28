@@ -111,5 +111,7 @@
     privatekey_path:       "{{ certs_private_key_fullpath }}"
     privatekey_passphrase: "{{ certs_key_passphrase | default(omit) }}"
     certificate_path:      "{{ certs_certificate_fullpath }}"
-    other_certificates:    "{{ certs_certificate_fullchain_fullpath }}"
+    other_certificates:
+      - "{{ certs_certificate_fullchain_fullpath }}"
+      - "{{ certs_certificate_chain_fullpath }}"
     state:                 present
