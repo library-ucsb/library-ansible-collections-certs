@@ -110,6 +110,7 @@
     path:                         "{{ certs_certificate_fullpath }}.pkcs12"
     privatekey_path:              "{{ certs_private_key_fullpath }}"
     privatekey_passphrase:        "{{ certs_key_passphrase | default(omit) }}"
+    passphrase:                   "{{ certs_key_passphrase | default(omit) }}"
     certificate_path:             "{{ certs_certificate_fullpath }}"
     other_certificates_parse_all: yes
     other_certificates:
