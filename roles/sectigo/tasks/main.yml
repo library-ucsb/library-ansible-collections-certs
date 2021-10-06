@@ -57,7 +57,7 @@
     path: "{{ certs_csr_fullpath }}"
     privatekey_path: "{{ certs_private_key_fullpath }}"
     privatekey_passphrase: "{{ certs_key_passphrase | default(omit) }}"
-    subject_alt_name: "{{ certs_sans | map('regex_replace', '^', 'DNS:') | list }}"
+    subject_alt_name: "{{ certs_sans | map('regex_replace', '^', 'DNS:') | list | unique }}"
     common_name: "{{ certs_cn }}"
     email_address: "{{ certs_default_email }}"
     organizational_unit_name: "{{ certs_default_ou }}"
@@ -69,7 +69,6 @@
 # Submit CSR
 - name: acme_certificate - stage 1 - submit csr for cert generation
   community.crypto.acme_certificate:
-    #account_key_src:  "{{ certs_private_key_fullpath }}"
     account_key_src:  "{{ certs_acme_private_key }}"
     acme_directory:   "{{ certs_acme_server_url }}"
     account_uri:      "{{ sectigo_response.account_uri }}"
@@ -89,7 +88,6 @@
     account_key_src:  "{{ certs_acme_private_key }}"
     acme_directory:   "{{ certs_acme_server_url }}"
     account_uri:      "{{ sectigo_response.account_uri }}"
-    #account_email:    "{{ certs_default_email }}"
     acme_version:     2
 
     terms_agreed:     yes
