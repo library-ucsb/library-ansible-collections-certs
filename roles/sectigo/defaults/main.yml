@@ -27,3 +27,8 @@ certs_key_size: 4096
 #certs_key_cipher: ## need to assert something here if using a passphrase
 certs_key_path: 'certs/'
 certs_key_days: 90
+
+
+
+# This is the passphrase used to 'unlock' this pkcs12 file.  It's not the same as the private key passphrase.
+certs_pkcs12_cert_passphrase: 'l1braryd3f4ul7'

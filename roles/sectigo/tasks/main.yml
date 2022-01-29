@@ -101,6 +101,7 @@
     data:             "{{ sectigo_response_challenge }}"
   when: sectigo_response_challenge is changed
 
+# generate the pkcs12 keystore used by java apps (tomcat, jira, confluence)
 - name: generate pkcs12 certificate file
   community.crypto.openssl_pkcs12:
     action:                       export
@@ -108,7 +109,8 @@
     path:                         "{{ certs_certificate_fullpath }}.pkcs12"
     privatekey_path:              "{{ certs_private_key_fullpath }}"
     privatekey_passphrase:        "{{ certs_key_passphrase | default(omit) }}"
-    passphrase:                   "{{ certs_key_passphrase | default(omit) }}"
+
+    passphrase:                   "{{ certs_pkcs12_cert_passphrase | default('changeit') }}"
     certificate_path:             "{{ certs_certificate_fullpath }}"
     other_certificates_parse_all: yes
     other_certificates:
