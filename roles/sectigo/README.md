@@ -15,15 +15,26 @@ Role Variables
 
 All of the tunable variables can be found in `defaults/main.yml`.  The following are the key values that need adjustment, or at least further consideration.
 
-* `certs_default_email` : the email address registered with this certificate
+### `certs_default_email`
 
-* `certs_name` : the name given to this certificate.  any deriviate certificate files will contain this name.  (default: acme-default.library.ucsb.edu)
+The email address registered with this certificate
 
-* `certs_cn` : the common name.  typically the primary fqdn for the certiticate. (default: acme-default.library.ucsb.edu)
+### `certs_name` 
 
-* `certs_sans` : a list of subject alternative names to include. (default: [] )  
+The name given to this certificate.  any deriviate certificate files will contain this name.  (default: acme-default.library.ucsb.edu)
 
-* `certs_acme_private_key` : this is the certificate bound to your ACME EAB account.  If this file does not exist, one will be generated and bound/registered to your ACME EAB account, using this filepath.
+### `certs_cn` 
+
+The common name.  typically the primary fqdn for the certiticate. (default: acme-default.library.ucsb.edu)
+
+
+### `certs_sans`
+
+A  list of subject alternative names to include. (default: [] )  
+
+### `certs_acme_private_key`
+
+This is the certificate bound to your ACME EAB account.  If this file does not exist, one will be generated and bound/registered to your ACME EAB account, using this filepath.
 
 Upon first usage of an ACME EAB account, this file won't exist.  The play will then generate the 
 
