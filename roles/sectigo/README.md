@@ -63,8 +63,8 @@ The http endpoint used for ACME transactions.  When creating a Sectigo Domain AC
 
 These attributes are the ACME EAB authentication values received when adding a new account to a Sectigo ACME endpoint under the section titled: **External Account Binding**.
 
-`certs_acme_eab_key`: the HMAC Key received from Sectigo
-`certs_acme_eab_kid`: the Key ID received from Sectigo
+* `certs_acme_eab_key`: the HMAC Key received from Sectigo
+* `certs_acme_eab_kid`: the Key ID received from Sectigo
 
 #### `certs_key_path`
 
