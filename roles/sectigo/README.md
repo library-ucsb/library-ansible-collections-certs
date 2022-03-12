@@ -1,17 +1,32 @@
-Role Name
+library.certs.sectigo
 =========
 
-A brief description of the role goes here.
+Manages the request and acquisition of a Sectigo SSL Signed Certificate via an ACME interface using EAB authentication.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+- Delegated subdomain certificate management privileges established by UCSB SOC. [See Here](https://www.it.ucsb.edu/ssl-certificates/ssl-certificates-subdomain-delegation)
+- Access to manage your domains via [Sectigo Certificate Manager Portal](https://www.cert-manager.com/customer/incommon).
+
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+All of the tunable variables can be found in `defaults/main.yml`.  The following are the key values that need adjustment, or at least further consideration.
+
+* `certs_default_email` : the email address registered with this certificate
+
+* `certs_name` : the name given to this certificate.  any deriviate certificate files will contain this name.  (default: acme-default.library.ucsb.edu)
+
+* `certs_cn` : the common name.  typically the primary fqdn for the certiticate. (default: acme-default.library.ucsb.edu)
+
+* `certs_sans` : a list of subject alternative names to include. (default: [] )  
+
+* `certs_acme_private_key` : this is the certificate bound to your ACME EAB account.  If this file does not exist, one will be generated and bound/registered to your ACME EAB account, using this filepath.
+
+Upon first usage of an ACME EAB account, this file won't exist.  The play will then generate the 
+
 
 Dependencies
 ------------
