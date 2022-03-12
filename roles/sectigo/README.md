@@ -81,8 +81,8 @@ maximum: 365 ( I think... )
 
 If you need to password protect the corresponding private key generated for the certificate, you establish that here.  **Both** values must be asserted, or **both** commented out.
 
-`certs_key_passphrse`: passphrased assigned to the private key
-`certs_key_cipher`: best to set this to `auto`
+* `certs_key_passphrse`: passphrased assigned to the private key
+* `certs_key_cipher`: best to set this to `auto`
 
 #### `certs_pkcs12_cert_passphrase`
 
