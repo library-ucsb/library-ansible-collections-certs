@@ -1,3 +1,3 @@
 # Ansible Collection - library.certs
 
-Documentation for the collection.
+At present the only role this Collection contains is the `sectigo` role.
